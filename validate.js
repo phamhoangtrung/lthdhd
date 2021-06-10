@@ -6,6 +6,7 @@ function isEmpty(value = "") {
   return false;
 }
 
+// k nhỏ hơn 0 và k quá 199
 function isOutOfBounds(value) {
   if (value < 0) {
     return -1;
@@ -13,6 +14,7 @@ function isOutOfBounds(value) {
   if (value > 199) return 1;
 }
 
+//check input là number
 function isNumber(value = "") {
   if (value == "") {
     return false;
@@ -29,6 +31,7 @@ function isNumber(value = "") {
 
 function validateCylinder(param) {
   let name = "Chuỗi cylinder";
+  // Cắt khoảng trắng white space đầu cuối
   let value = param.trim();
   if (isEmpty(value)) {
     return `${name} không được rỗng`;
@@ -39,7 +42,7 @@ function validateCylinder(param) {
     for (let val in data) {
       let number = data[val];
       if (!isNumber(number)) {
-        return `${name} chứa kí tự không phải là số`;
+        return `${name} chứa kí tự không hợp lệ`;
       }
       number = Number(number);
       if (isOutOfBounds(number) === -1) {
@@ -61,7 +64,7 @@ function validateHeader(param = "") {
     return `${name} không được rỗng`;
   }
   if (!isNumber(value)) {
-    return `${name} chứa kí tự không phải là số`;
+    return `${name} chứa kí tự không  hợp lệ`;
   }
   value = Number(value);
   if (isOutOfBounds(value) == -1) {

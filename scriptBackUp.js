@@ -275,106 +275,44 @@ function CLOOK(arr = [], head, direction = "") {
   let down = [];
   let up = [];
   let seek_sequence = [];
-
-  // Tracks on the down of the
-  // head will be serviced when
-  // once the head comes back
-  // to the beggining (down end)
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] < head) down.push(arr[i]);
     if (arr[i] > head) up.push(arr[i]);
   }
-
   down.sort(compareNumbers);
   up.sort(compareNumbers);
-
-  // First service the requests
-  // on the up side of the
-  // head
   if (direction == "up") {
     for (let i = 0; i < up.length; i++) {
       cur_track = up[i];
-
-      // Appending current track
-      // to seek sequence
       seek_sequence.push(cur_track);
-
-      // Calculate absolute distance
       distance = Math.abs(cur_track - head);
-
-      // Increase the total count
       seek_count += distance;
-
-      // Accessed track is now new head
       head = cur_track;
     }
-
-    // Once reached the up end
-    // jump to the last track that
-    // is needed to be serviced in
-    // down direction
     seek_count += Math.abs(head - down[0]);
     head = down[0];
-
-    // Now service the requests again
-    // which are down
     for (let i = 0; i < down.length; i++) {
       cur_track = down[i];
-
-      // Appending current track to
-      // seek sequence
       seek_sequence.push(cur_track);
-
-      // Calculate absolute distance
       distance = Math.abs(cur_track - head);
-
-      // Increase the total count
       seek_count += distance;
-
-      // Accessed track is now the new head
       head = cur_track;
     }
   } else if (direction == "down") {
     for (let i = 0; i < down.length; i++) {
       cur_track = down[i];
-
-      // Appending current track
-      // to seek sequence
       seek_sequence.push(cur_track);
-
-      // Calculate absolute distance
       distance = Math.abs(cur_track - head);
-
-      // Increase the total count
       seek_count += distance;
-
-      // Accessed track is now new head
       head = cur_track;
     }
-
-    // Once reached the up end
-    // jump to the last track that
-    // is needed to be serviced in
-    // up direction
     seek_count += Math.abs(head - up[0]);
     head = up[0];
-
-    // Now service the requests again
-    // which are up
     for (let i = 0; i < up.length; i++) {
       cur_track = up[i];
-
-      // Appending current track to
-      // seek sequence
       seek_sequence.push(cur_track);
-
-      // Calculate absolute distance
       distance = Math.abs(cur_track - head);
-
-      // Increase the total count
       seek_count += distance;
-
-      // Accessed track is now the new head
       head = cur_track;
     }
   }
@@ -409,7 +347,10 @@ runBtn.addEventListener("click", () => {
   });
 
   // Run algorithms
-  let { seek_count, seek_sequence } = runAlgorithm(
+  let {
+    seek_count,
+    seek_sequence
+  } = runAlgorithm(
     algorithmsValue,
     numberCylinderString,
     headerPositionValue,

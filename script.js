@@ -5,8 +5,6 @@ let direction = document.getElementById("direction");
 let cylinderString = document.getElementById("cylinder-string");
 let headerPosition = document.getElementById("header-position");
 let runBtn = document.getElementById("runBtn");
-// let input = document.getElementsByTagName('input');
-
 
 //Result element
 let result = document.getElementById("result");
@@ -33,13 +31,6 @@ algorithms.addEventListener("change", () => {
   }
 });
 
-// find min from head
-function findMinIndexFromHead(head = 0, arr = []) {
-  let arrTemp = arr.map((a) => Math.abs(head - a));
-  let min = Math.min.apply(null, arrTemp);
-  let idx = arrTemp.indexOf(min);
-  return idx;
-}
 //String arr to Number arr
 function toNumberArray(arr = []) {
   return arr.map((s) => Number(s));
@@ -55,41 +46,57 @@ function getChartPosition(position) {
 }
 //Create points on the chart
 function createPoint(number = 0) {
+  //Đánh số
   // +100 to let the chart in middle of the canvas
   let xPostition = getChartPosition(number) + 100;
   let yPostition = 30;
   // xPostition-5 to let the number in middle of the cross line
   ctx.fillText(`${number}`, xPostition - 5, yPostition);
 
+  //đánh dấu gạch
   //Draw a cross line
   ctx.beginPath();
   ctx.moveTo(xPostition, yPostition - 10);
   ctx.lineTo(xPostition, yPostition - 24);
   ctx.stroke();
 }
-//Drawing 1
-function drawing(startPosition, arr) {
-  let y = 30;
+// //Drawing 1
+// function drawing(startPosition, arr) {
+//   let y = 30;
 
-  ctx.beginPath();
-  ctx.moveTo(getChartPosition(startPosition), y);
-  arr.map((postion) => {
-    y = y + 30;
-    ctx.lineTo(getChartPosition(postion), Number(y));
-  });
+//   ctx.beginPath();
+//   ctx.moveTo(getChartPosition(startPosition), y);
+//   arr.map((postion) => {
+//     y = y + 30;
+//     ctx.lineTo(getChartPosition(postion), Number(y));
+//   });
 
-  ctx.stroke();
-}
-//Drawing 2
-function drawing2(startPosition, arr = []) {
+//   ctx.stroke();
+// }
+// //Drawing 2
+function drawing2(startPosition, arr = [], algorithm) {
   let y = 45;
+  drawLine();
   arr.unshift(startPosition);
 
   for (let i = 0; i < arr.length; i++) {
     //Cause we have arr[i-1] so we need to use this if clause to prevent the arr point to empty value(array length + 1)
-    if (i == arr.length - 1) {
-      break;
+    if (algorithm === "look" || algorithm == "c-look") {
+      const min = Math.min.apply(null, arr);
+      const max = Math.max.apply(null, arr);
+      console.log(arr[i]);
+      if (arr[i] === min) {
+        let yTemp = y;
+        let pos1 = getChartPosition(min) + 100;
+        dashLine(pos1, 30, pos1, yTemp);
+      }
+      if (arr[i] === max) {
+        let yTemp = y;
+        let pos2 = getChartPosition(max) + 100;
+        dashLine(pos2, 30, pos2, yTemp);
+      }
     }
+
     //init a Line Object
     let line = new Line(
       getChartPosition(arr[i]) + 100,
@@ -97,15 +104,27 @@ function drawing2(startPosition, arr = []) {
       getChartPosition(arr[i + 1]) + 100,
       y + 30
     );
-    line.drawWithArrowheads(ctx);
+    if (i !== arr.length - 1) {
+      line.drawWithArrowheads(ctx);
+    }
     y += 30;
   }
 }
 //Draw horizontal axis on the chart
 function drawLine() {
   ctx.beginPath();
+  ctx.setLineDash([]);
   ctx.moveTo(105, 13);
   ctx.lineTo(1100, 13);
+  ctx.stroke();
+}
+// Draw dashed line
+function dashLine(fromX, fromY, toX, toY) {
+  ctx.strokeStyle = "#808080";
+  ctx.beginPath();
+  ctx.setLineDash([5, 5]);
+  ctx.moveTo(fromX, fromY);
+  ctx.lineTo(toX, toY);
   ctx.stroke();
 }
 
@@ -121,32 +140,29 @@ runBtn.addEventListener("click", () => {
   let algorithmsValue = algorithms.value;
   let directionValue = direction.value;
 
+  //validate
   if (validateCylinder(cylinderStringValue) != undefined) {
     error = validateCylinder(cylinderStringValue);
     alert(error);
     return;
   }
-
   if (validateHeader(headerPositionValue) != undefined) {
     error = validateHeader(headerPositionValue);
     alert(error);
     return;
   }
 
-  // Compute value
+  // Chuyển input từ mảng string thành mảng number
   let numberCylinderString = toNumberArray(
     cylinderStringValue.trim().split(" ")
   );
+  //clone mảng vừa tạo thành 1 mảng mới để sort
   let numberCylinderClone = [...numberCylinderString];
 
-  // Init new canvas
+  // Tạo lại khung canvasr mới
   ctx.canvas.height = (numberCylinderString.length + 3) * 30;
-  canvas.style.border = "2px solid #46da46";
+  canvas.style.border = "2px solid #808080";
 
-  //Draw horizontal axis
-  drawLine();
-
-  // Create all ponits on the Chart
   //Create points that are not in the array
   createPoint(Number(headerPositionValue));
   createPoint(0);
@@ -166,22 +182,21 @@ runBtn.addEventListener("click", () => {
   );
 
   //Draw chart vectors
-  drawing2(Number(headerPositionValue), seek_sequence);
-
+  drawing2(Number(headerPositionValue), seek_sequence, algorithmsValue);
+  
   // Show ouput value on HTML
-  result.innerHTML = `Số bước dịch chuyển: ${seek_count} bước.`;
+  result.innerHTML = `<b>Số bước dịch chuyển</b>: ${seek_count} bước.`;
   // console.log(`seek_sequence`, seek_sequence)
-  let htmlString = "Thứ tự đọc :&ensp;";
+  let htmlString = "<b>Thứ tự đọc :&ensp;</b>";
+  seek_sequence.shift();
   seek_sequence.map((data) => {
     htmlString += `${data}&ensp;`;
     result1.innerHTML = htmlString;
   });
+  result1.scrollIntoView();
 });
 
-
-
-
-document.addEventListener("keyup", function(event) {
+document.addEventListener("keyup", function (event) {
   // Number 13 is the "Enter" key on the keyboard
   if (event.keyCode === 13) {
     // Cancel the default action, if needed

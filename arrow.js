@@ -8,6 +8,7 @@ function Line(x1, y1, x2, y2) {
   }
   Line.prototype.drawWithArrowheads = function (ctx) {
     // arbitrary styling
+    ctx.setLineDash([]);
     ctx.strokeStyle = "#46da46";
     ctx.fillStyle = "#46da46";
     ctx.lineWidth = 1;
@@ -29,11 +30,12 @@ function Line(x1, y1, x2, y2) {
   Line.prototype.drawArrowhead = function (ctx, x, y, radians) {
     ctx.save();
     ctx.beginPath();
+    ctx.setLineDash([]);
     ctx.translate(x, y);
     ctx.rotate(radians);
     ctx.moveTo(0, 0);
-    ctx.lineTo(3, 4);
-    ctx.lineTo(-3, 4);
+    ctx.lineTo(4, 6);
+    ctx.lineTo(-4, 6);
     ctx.closePath();
     ctx.restore();
     ctx.fill();
