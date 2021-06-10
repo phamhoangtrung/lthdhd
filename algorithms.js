@@ -118,7 +118,6 @@ function FCFS(arr = [], head) {
   };
 }
 // SSTF algorithm
-// Ideal: Use one array to loop and one to get value after calculated
 function SSTF(arr = [], head) {
   // Init data
   let seek_count = 0;

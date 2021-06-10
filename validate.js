@@ -46,10 +46,10 @@ function validateCylinder(param) {
       }
       number = Number(number);
       if (isOutOfBounds(number) === -1) {
-        return `${name} chứa số bé hơn 0`;
+        return `${name} không được bé hơn 0`;
       }
       if (isOutOfBounds(number) === 1) {
-        return `${name} chứa số lớn hơn 199`;
+        return `${name} không được lớn hơn 199`;
       }
     }
   } catch (error) {
@@ -64,13 +64,13 @@ function validateHeader(param = "") {
     return `${name} không được rỗng`;
   }
   if (!isNumber(value)) {
-    return `${name} chứa kí tự không  hợp lệ`;
+    return `${name} chứa kí tự không hợp lệ`;
   }
   value = Number(value);
   if (isOutOfBounds(value) == -1) {
-    return `${name} bé hơn 0`;
+    return `${name} không được bé hơn 0`;
   }
   if (isOutOfBounds(value) == 1) {
-    return `${name} lớn hơn 199`;
+    return `${name} không được lớn hơn 199`;
   }
 }

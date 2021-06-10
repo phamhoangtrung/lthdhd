@@ -80,7 +80,7 @@ function drawing2(startPosition, arr = [], algorithm) {
   arr.unshift(startPosition);
 
   for (let i = 0; i < arr.length; i++) {
-    //Cause we have arr[i-1] so we need to use this if clause to prevent the arr point to empty value(array length + 1)
+    // Vẽ đường min và max khi giải thuật toán LOOK và C-LOOK
     if (algorithm === "look" || algorithm == "c-look") {
       const min = Math.min.apply(null, arr);
       const max = Math.max.apply(null, arr);
@@ -183,7 +183,7 @@ runBtn.addEventListener("click", () => {
 
   //Draw chart vectors
   drawing2(Number(headerPositionValue), seek_sequence, algorithmsValue);
-  
+
   // Show ouput value on HTML
   result.innerHTML = `<b>Số bước dịch chuyển</b>: ${seek_count} bước.`;
   // console.log(`seek_sequence`, seek_sequence)
